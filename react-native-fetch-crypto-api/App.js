@@ -23,11 +23,16 @@ export default function App() {
 
   const [addmodalVisible, setAddmodalVisible] = useState(false);
   const bottomSheetRef = useRef();
+  const [crypto, setCrypto] = useState('');
 
   const [infoText, setinfoText] = useState ([]);
 
+  const addSearchedText = (crypto) => {
+    setCrypto(crypto);
+  }
+
   const _getData = async () => {
-    fetch('https://api.coingecko.com/api/v3/search?query=btc')
+    fetch('https://api.coingecko.com/api/v3/search?query='+crypto)
     .then((response) => response.json())
     .then((responseJson) => {
       setinfoText((list) => {
@@ -71,7 +76,7 @@ export default function App() {
           <View style={styles.inputView}>
             <TextInput
               style={{ flex: 1, paddingHorizontal: 12}}
-              
+              onChangeText={addSearchedText}
               placeholder={'Search'}
             />
               <TouchableOpacity
