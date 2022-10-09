@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { 
   StyleSheet, 
@@ -6,6 +7,8 @@ import {
   Text, 
   TextInput, 
   TouchableOpacity, 
+  FlatList,
+  Image
   
 } from 'react-native';
 
@@ -14,9 +17,31 @@ import RNModal from 'react-native-modal';
 
 import { Icon } from 'react-native-elements';
 
+import BottomSheet from 'react-native-raw-bottom-sheet';
+
 export default function App() {
 
   const [addmodalVisible, setAddmodalVisible] = useState(false);
+  const bottomSheetRef = useRef();
+
+  const [infoText, setinfoText] = useState ([]);
+
+  const _getData = async () => {
+    fetch('https://api.coingecko.com/api/v3/search?query=btc')
+    .then((response) => response.json())
+    .then((responseJson) => {
+      setinfoText((list) => {
+        return [
+          ...responseJson['coins']
+        ];
+      });
+      console.log(infoText);
+    })
+    .catch((error) => {
+      setModalVisible(true);
+      console.error(error)
+    });
+  }
 
   return (
     <View style={styles.container}>
@@ -51,6 +76,10 @@ export default function App() {
             />
               <TouchableOpacity
                 style={{ padding: 4}}
+                onPress={() => {
+                  _getData();
+                  bottomSheetRef.current.open();
+                }}
               >
                 <Icon name='search' type='font-awesome-5' size={20} />
               </TouchableOpacity>
@@ -97,6 +126,61 @@ export default function App() {
           </View>
         </View>
       </RNModal>
+
+      {/* Bottom sheet */}
+      <View>
+        <BottomSheet
+          ref={bottomSheetRef}
+          closeOnDragDown={true}
+          height={300}
+          openDuration={250}
+        >
+          <View
+            style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: '#f1f3f6',
+              // alignItems: 'center',
+              paddingTop: 20,
+              paddingBottom: 20
+            }}
+          > 
+            <Text style={{ 
+              paddingHorizontal: 20,
+              fontSize: 18,
+              fontWeight: '700',
+              paddingBottom: 10
+            }}>
+              Select crypto:
+            </Text>
+            <FlatList style={styles.header} data={infoText} renderItem={({item}) => (
+            // Render result item
+            <TouchableOpacity style={styles.rezString}>
+              <View style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignContent: 'center'
+              }}>
+              <Image
+                  style={styles.cryptoLogo}
+                  source={{
+                    uri: item.thumb,
+                  }}
+                /> 
+                <Text style={styles.cryptoName}>
+                
+                {item.symbol} 
+              </Text>
+              </View>
+              
+              <TouchableOpacity style={styles.btnAdd}>
+                <Text style={styles.btnText}>+</Text>
+              </TouchableOpacity>
+            </TouchableOpacity>
+          )} />
+          </View>
+        </BottomSheet>
+      </View>
       <StatusBar style="auto" />
     </View>
   );
@@ -179,5 +263,40 @@ const styles = StyleSheet.create({
   modalButtonText: {
     color: '#fff',
     fontSize: 16
-  }
+  },
+
+  cryptoLogo: {
+    width: 24,
+    height: 24,
+    marginHorizontal: 10
+  },
+  rezString: {
+    paddingHorizontal: 20,
+    height: 40,
+    marginVertical: 5,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  cryptoName: {
+    display: 'flex',
+    textAlign: 'center',
+    fontSize: 16,
+    
+  },
+  btnAdd: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: '#333333',
+    alignItems: 'center',
+    width: 30,
+    height: 30,
+    borderRadius: 50
+  },
+  btnText: {
+    color: 'white',
+    fontWeight: 'bold'
+  },
 });

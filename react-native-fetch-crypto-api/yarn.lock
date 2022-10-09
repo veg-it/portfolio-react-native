@@ -5483,6 +5483,11 @@
   dependencies:
     "lodash" "^4.17.15"
 
+"react-native-raw-bottom-sheet@^2.2.0":
+  "integrity" "sha512-qL4JKIqvbcVxbkKzeh51hjV7suoJN3ouxzvLmOg0FBUV1yiJAfEbacjQdtRCI6+OU5pyGFBIifLsTXcFDwHggg=="
+  "resolved" "https://registry.npmjs.org/react-native-raw-bottom-sheet/-/react-native-raw-bottom-sheet-2.2.0.tgz"
+  "version" "2.2.0"
+
 "react-native-safe-area-context@^3.1.9":
   "integrity" "sha512-xfpVd0CiZR7oBhuwJ2HcZMehg5bjha1Ohu1XHpcT+9ykula0TgovH2BNU0R5Krzf/jBR1LMjR6VabxdlUjqxcA=="
   "resolved" "https://registry.npmjs.org/react-native-safe-area-context/-/react-native-safe-area-context-3.4.1.tgz"
