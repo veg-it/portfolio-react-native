@@ -38,6 +38,7 @@ export default function App() {
           <Text style={{ fontSize: 18, fontWeight: '700'}}>
             Add to wallet
           </Text>
+
           <Text style={{ marginVertical: 10 }}>
             Search crypto: 
           </Text>
@@ -53,6 +54,31 @@ export default function App() {
               >
                 <Icon name='search' type='font-awesome-5' size={20} />
               </TouchableOpacity>
+          </View>
+          
+          <Text style={{ marginVertical: 10 }}>
+            Selected crypto: 
+          </Text>
+
+          <View style={styles.selectedCrypto}>
+            <View style={styles.iconHolder}>
+
+            </View>
+            <Text style={styles.selectedCryptoText}>
+              None
+            </Text>
+          </View>
+
+          <Text style={{ marginVertical: 10 }}>
+            Add wallet balance: 
+          </Text>
+
+          <View style={styles.inputView}>
+            <TextInput
+              style={{ flex: 1, paddingHorizontal: 12}}
+              
+              placeholder={'Value'}
+            />
           </View>
           
           <View style={{ flexDirection: 'row', justifyContent: 'flex-end'}}>
@@ -91,6 +117,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 10
   },
+  selectedCrypto:{
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  selectedCryptoText: {
+    marginHorizontal: 10
+  },
+  iconHolder: {
+    width: 50,
+    height: 50,
+    backgroundColor: '#f1f3f6',
+    borderRadius: 50
+  },
 
   inputView: {
     // width: '100%',
@@ -101,7 +141,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15
+    marginBottom: 10
   },
   addButtonText:{
     color: '#fff'
@@ -126,6 +166,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 4,
     marginLeft: 10,
+    marginTop: 10,
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: {
