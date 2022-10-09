@@ -25,6 +25,8 @@ export default function App() {
   const bottomSheetRef = useRef();
   const [crypto, setCrypto] = useState('');
 
+  const [sCrypto, setSCrypto] = useState('');
+
   const [infoText, setinfoText] = useState ([]);
 
   const addSearchedText = (crypto) => {
@@ -96,10 +98,17 @@ export default function App() {
 
           <View style={styles.selectedCrypto}>
             <View style={styles.iconHolder}>
-
+                <Image
+                  style={{
+                    width: 30,
+                    height: 30
+                  }}
+                  source={{
+                    uri: sCrypto.thumb
+                  }} />
             </View>
             <Text style={styles.selectedCryptoText}>
-              None
+              {sCrypto.symbol}
             </Text>
           </View>
 
@@ -160,7 +169,14 @@ export default function App() {
             </Text>
             <FlatList style={styles.header} data={infoText} renderItem={({item}) => (
             // Render result item
-            <TouchableOpacity style={styles.rezString}>
+            <TouchableOpacity style={styles.rezString} onPress={() => {
+              
+              setSCrypto(item);
+              console.log(sCrypto);
+              bottomSheetRef.current.close();
+            }
+
+            }>
               <View style={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -218,7 +234,11 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     backgroundColor: '#f1f3f6',
-    borderRadius: 50
+    borderRadius: 50,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   inputView: {
