@@ -8,16 +8,18 @@ import {
   TextInput, 
   TouchableOpacity, 
   FlatList,
-  Image
+  Image,
+  Platform,
   
 } from 'react-native';
 
-//npm i react-native-modal
 import RNModal from 'react-native-modal';
 
 import { Icon } from 'react-native-elements';
 
 import BottomSheet from 'react-native-raw-bottom-sheet';
+
+import Constants from 'expo-constants';
 
 export default function App() {
 
@@ -33,6 +35,16 @@ export default function App() {
     setCrypto(crypto);
   }
 
+  const [wallets,setWallets] = useState([]);
+  const [value,setValue] = useState('');
+  const addValue = (value) => {
+    setValue(value);
+  }
+
+  const addNewWallet = (thumb, symbol, value) => {
+    setWallets(oldArray => [...oldArray, {thumb: thumb, symbol: symbol, value: value}]);
+  };
+
   const _getData = async () => {
     fetch('https://api.coingecko.com/api/v3/search?query='+crypto)
     .then((response) => response.json())
@@ -42,7 +54,6 @@ export default function App() {
           ...responseJson['coins']
         ];
       });
-      console.log(infoText);
     })
     .catch((error) => {
       setModalVisible(true);
@@ -52,14 +63,87 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Add your first crypto to the wallet</Text>
+
+      <View style={{
+        backgroundColor: '#f1f3f6',
+        width: '90%',
+        height: '30%',
+        marginBottom: 20,
+        marginTop: 20,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 20
+      }}>
+        <Text style={{
+          fontSize: 30,
+          color: '#333'
+        }}>
+          0$
+        </Text>
+      </View>
+      <View style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '90%'
+      }}>
+        <Text>Your crypto wallets: </Text>
+        
+        <TouchableOpacity 
+          style={styles.addButton}
+          onPress={() => setAddmodalVisible(true)}
+        >
+          <Text style={styles.addButtonText}>Add</Text>
+        </TouchableOpacity>
+      </View>
       
-      <TouchableOpacity 
-        style={styles.addButton}
-        onPress={() => setAddmodalVisible(true)}
-      >
-        <Text style={styles.addButtonText}>Add</Text>
-      </TouchableOpacity>
+
+      <FlatList 
+        style={{
+          width: '90%'
+        }} 
+        data={wallets} 
+        renderItem={({item}) => (
+            // Render result item
+            <TouchableOpacity  
+              style={{
+                backgroundColor: 'red',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: 10,
+                borderRadius: 8,
+                marginVertical: 10,
+                backgroundColor: '#f1f3f6'
+                
+              }}
+            >
+              <View style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignContent: 'center',
+              }}>
+                <Image
+                    style={styles.cryptoLogo}
+                    source={{
+                      uri: item.thumb,
+                    }}
+                  /> 
+                  <Text style={styles.cryptoName}>
+                  
+                  {item.symbol} 
+                </Text>
+              </View>
+              
+              <TouchableOpacity style={styles.btnAdd}>
+                <Text style={styles.btnText}>{item.value}</Text>
+              </TouchableOpacity>
+            </TouchableOpacity>
+          )} />
 
       <RNModal
         isVisible={addmodalVisible}
@@ -119,7 +203,7 @@ export default function App() {
           <View style={styles.inputView}>
             <TextInput
               style={{ flex: 1, paddingHorizontal: 12}}
-              
+              onChangeText={addValue}
               placeholder={'Value'}
             />
           </View>
@@ -133,7 +217,11 @@ export default function App() {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.modalButton}
-              onPress={() => setAddmodalVisible(false)}
+              onPress={() => {
+                addNewWallet(sCrypto.thumb, sCrypto.symbol, value);
+                console.log(wallets);
+                setAddmodalVisible(false)
+              }}
             >
               <Text style={styles.modalButtonText}>Ok</Text>
             </TouchableOpacity>
@@ -209,10 +297,11 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: '100%',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: Platform.OS === "ios" ? 0 : Constants.statusBarHeight + 10
   },
   addButton: {
     backgroundColor: '#333',
