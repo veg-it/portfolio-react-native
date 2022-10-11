@@ -139,9 +139,11 @@ export default function App() {
                 </Text>
               </View>
               
-              <TouchableOpacity style={styles.btnAdd}>
-                <Text style={styles.btnText}>{item.value}</Text>
-              </TouchableOpacity>
+              <View style={{
+                
+              }}>
+                <Text>{item.value}</Text>
+              </View>
             </TouchableOpacity>
           )} />
 
