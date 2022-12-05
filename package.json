@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "expo-constants": "^14.0.2",
+    "react-native-elements": "^3.4.2",
+    "react-native-select-dropdown": "^3.1.0"
+  }
+}
